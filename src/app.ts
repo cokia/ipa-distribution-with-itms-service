@@ -6,6 +6,7 @@ import cors from 'cors';
 import {
   IApp, addApp, appList, callFromAppName,
 } from './db';
+import { uploadplist, uploadipa } from './awss3';
 import { generate_xml_string } from './xmlparser';
 
 class App {

@@ -1,14 +1,14 @@
 import AWS from 'aws-sdk';
 
 const s3 = new AWS.S3({
-  accessKeyId: config.AWS.S3.ACCCESSKEY,
-  secretAccessKey: config.AWS.S3.SECRET.ACCCESSKEY,
+  accessKeyId: process.env.S3_access,
+  secretAccessKey: process.env.S3_secret,
 });
 
-async function uploadplist(content:string) {
+export async function uploadplist(name:string, content:string) {
   const params = {
     Bucket: 'ipa-distribution-hanu',
-    Key: 'downloads.plist', // File name you want to save as in S3
+    Key: `${name}/downloads.plist`, // File name you want to save as in S3
     Body: content,
   };
 
@@ -16,6 +16,36 @@ async function uploadplist(content:string) {
     if (err) {
       throw err;
     }
-    console.log(`File uploaded successfully. ${data.Location}`);
+    console.log(`plist uploaded successfully. ${data.Location}`);
+  });
+}
+
+export async function uploadipa(name:string, content:string) {
+  const params = {
+    Bucket: 'ipa-distribution-hanu',
+    Key: `${name}/${name}.ipa`, // File name you want to save as in S3
+    Body: content,
+  };
+
+  s3.upload(params, (err:any, data:any) => {
+    if (err) {
+      throw err;
+    }
+    console.log(`ipa uploaded successfully. ${data.Location}`);
+  });
+}
+
+export async function uploadimage(name:string, content:string) {
+  const params = {
+    Bucket: 'ipa-distribution-hanu',
+    Key: `${name}/${name}.png`, // File name you want to save as in S3
+    Body: content,
+  };
+
+  s3.upload(params, (err:any, data:any) => {
+    if (err) {
+      throw err;
+    }
+    console.log(`image uploaded successfully. ${data.Location}`);
   });
 }

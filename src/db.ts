@@ -6,7 +6,7 @@ mongoose.connection.on('error', console.error);
 mongoose.connection.once('open', () => {
   console.info('✅ Connected to mongod server✅');
 });
-
+const { mongourl } = process.env;
 mongoose.connect(mongourl, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const appSchema = new Schema({
@@ -20,7 +20,7 @@ const appSchema = new Schema({
   data: { type: String, required: false },
 });
 
-const App = mongoose.model<IApp>('app', appSchema);
+const App = mongoose.models('app', appSchema);
 
 export interface IApp extends Document {
   name: String;
