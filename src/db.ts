@@ -19,7 +19,7 @@ const appSchema = new Schema({
   data: { type: String, required: false },
 });
 
-const App = mongoose.models('app', appSchema);
+const App = mongoose.model('app', appSchema);
 
 export interface IApp extends Document {
   name: String;
