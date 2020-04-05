@@ -1,13 +1,17 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
 /* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
 import express, { Application } from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import {
   IApp, addApp, appList, callFromAppName,
 } from './db';
 import { uploadplist, uploadipa } from './awss3';
 import { generate_xml_string } from './xmlparser';
+
+dotenv.config();
 
 class App {
   public application: Application;
@@ -54,8 +58,7 @@ app.post('/register/app', async (req, res) => {
   const {
     name, bundleid, version,
   } = req.query;
-
-  const { data } = req.body;
+  const { data, image, ipa } = req.body;
   res.status(200).send(await (addApp(name, bundleid, version, data)));
 });
 
