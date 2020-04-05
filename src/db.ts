@@ -6,8 +6,7 @@ mongoose.connection.on('error', console.error);
 mongoose.connection.once('open', () => {
   console.info('✅ Connected to mongod server✅');
 });
-const { mongourl } = process.env;
-mongoose.connect(mongourl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://docker.hanukoon.com:27017/', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const appSchema = new Schema({
   // rank: {type: String, required: true},
