@@ -1,11 +1,8 @@
-import { mongoose, Document } from 'mongoose';
+import mongoose from 'mongoose';
+import Document from 'mongoose';
 
 const { Schema } = mongoose;
 
-mongoose.connection.on('error', console.error);
-mongoose.connection.once('open', () => {
-  console.info('✅ Connected to mongod server✅');
-});
 mongoose.connect('mongodb://docker.hanukoon.com:27017/', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const appSchema = new Schema({
