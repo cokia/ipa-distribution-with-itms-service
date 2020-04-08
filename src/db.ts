@@ -20,6 +20,7 @@ const appSchema = new Schema({
 });
 
 const App = mongoose.model('app', appSchema);
+const app = new App();
 
 export interface IApp extends Document {
   name: String;
@@ -33,14 +34,14 @@ export interface IApp extends Document {
 
 export async function addApp(name:IApp['name'], bundleid:IApp['bundleid'], version:IApp['version'], data:IApp['version']) {
   const s3baseurl = 'https://ipa-distribution-hanu.s3.ap-northeast-2.amazonaws.com/';
-  App.name = name;
-  App.bundleid = bundleid;
-  App.version = version;
-  App.ipafile = `${s3baseurl}/${name}/${name}.ipa`;
-  App.plistfile = `${s3baseurl}/${name}/downloads.plist`;
-  App.imagefile = `${s3baseurl}/${name}/${name}.png`;
-  App.data = data;
-  App.save((err:any) => {
+  app.name = name;
+  app.bundleid = bundleid;
+  app.version = version;
+  app.ipafile = `${s3baseurl}/${name}/${name}.ipa`;
+  app.plistfile = `${s3baseurl}/${name}/downloads.plist`;
+  app.imagefile = `${s3baseurl}/${name}/${name}.png`;
+  app.data = data;
+  app.save((err:any) => {
     if (err) {
       console.error(err);
     }
@@ -48,9 +49,9 @@ export async function addApp(name:IApp['name'], bundleid:IApp['bundleid'], versi
 }
 
 export async function callFromAppName(name: string) {
-  return App.findOne({ name }).select({ __v: 0 });
+  return app.findOne({ name }).select({ __v: 0 });
 }
 
 export async function appList() {
-  return ((App.find().select({ __v: 0 })));
+  return ((app.find().select({ __v: 0 })));
 }
