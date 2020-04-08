@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import Document from 'mongoose';
+import mongoose, { Document } from 'mongoose';
+
 
 const { Schema } = mongoose;
 
@@ -16,7 +16,7 @@ const appSchema = new Schema({
   data: { type: String, required: false },
 });
 
-const App = mongoose.model('app', appSchema);
+const App = mongoose.model<IApp>('app', appSchema);
 const app = new App();
 
 export interface IApp extends Document {
@@ -46,9 +46,9 @@ export async function addApp(name:IApp['name'], bundleid:IApp['bundleid'], versi
 }
 
 export async function callFromAppName(name: string) {
-  return app.findOne({ name }).select({ __v: 0 });
+  return App.findOne({ name }).select({ __v: 0 });
 }
 
 export async function appList() {
-  return ((app.find().select({ __v: 0 })));
+  return ((App.find().select({ __v: 0 })));
 }
