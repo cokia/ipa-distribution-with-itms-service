@@ -41,7 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var Schema = mongoose_1.default.Schema;
-mongoose_1.default.connect('mongodb://docker.hanukoon.com:27017/', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose_1.default.connect('mongodb://docker.hanukoon.com:27017/');
 var appSchema = new Schema({
     // rank: {type: String, required: true},
     name: { type: String, required: true },

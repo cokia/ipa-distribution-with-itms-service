@@ -69,17 +69,6 @@ app.listen(3000, function () {
 app.get('/', function (req, res) {
     res.status(200).send('IPA Distribution SERVER');
 });
-app.get('/generateplist', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var ipaurl, imageurl, bundleid, name;
-    return __generator(this, function (_a) {
-        ipaurl = req.query.ipaurl;
-        imageurl = req.query.imageurl;
-        bundleid = req.query.bundleid;
-        name = req.query.name;
-        res.status(200);
-        return [2 /*return*/];
-    });
-}); });
 app.get('/applist', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, _b;
     return __generator(this, function (_c) {
@@ -108,7 +97,6 @@ app.post('/register/app', function (req, res) { return __awaiter(void 0, void 0,
                 _b = req.body, data = _b.data, image = _b.image, ipa = _b.ipa;
                 awss3_1.uploadipa(name, ipa);
                 awss3_1.uploadimage(name, image);
-                db_1.addApp(name, bundleid, version, data);
                 s3baseurl = 'https://ipa-distribution-hanu.s3.ap-northeast-2.amazonaws.com/';
                 ipaurl = s3baseurl + "/" + name + "/" + name + ".ipa";
                 return [4 /*yield*/, xmlparser_1.generate_xml_string(ipaurl, bundleid, name)];

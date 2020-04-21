@@ -37,15 +37,6 @@ app.get('/', (req, res) => {
   res.status(200).send('IPA Distribution SERVER');
 });
 
-app.get('/generateplist', async (req, res) => {
-  const { ipaurl } = req.query;
-  const { imageurl } = req.query;
-  const { bundleid } = req.query;
-  const { name } = req.query;
-
-  res.status(200);
-});
-
 app.get('/applist', async (req, res) => {
   res.status(200).send(await (appList()));
 });
@@ -61,7 +52,6 @@ app.post('/register/app', async (req, res) => {
   const { data, image, ipa } = req.body;
   uploadipa(name, ipa);
   uploadimage(name, image);
-  addApp(name, bundleid, version, data);
   const s3baseurl = 'https://ipa-distribution-hanu.s3.ap-northeast-2.amazonaws.com/';
   const ipaurl = `${s3baseurl}/${name}/${name}.ipa`;
   const plistcontext = await generate_xml_string(ipaurl, bundleid, name);

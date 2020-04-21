@@ -3,7 +3,7 @@ import mongoose, { Document } from 'mongoose';
 
 const { Schema } = mongoose;
 
-mongoose.connect('mongodb://docker.hanukoon.com:27017/', { useUnifiedTopology: true });
+mongoose.connect('mongodb://docker.hanukoon.com:27017/');
 
 const appSchema = new Schema({
   // rank: {type: String, required: true},
@@ -52,4 +52,3 @@ export async function callFromAppName(name: string) {
 export async function appList() {
   return ((App.find().select({ __v: 0 })));
 }
-
