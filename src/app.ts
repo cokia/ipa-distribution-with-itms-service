@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 import {
   IApp, addApp, appList, callFromAppName,
 } from './db';
-import { uploadplist, uploadipa } from './awss3';
+import { uploadplist, uploadipa, uploadimage } from './awss3';
 import { generate_xml_string } from './xmlparser';
 
 dotenv.config();
@@ -42,7 +42,7 @@ app.get('/generateplist', async (req, res) => {
   const { imageurl } = req.query;
   const { bundleid } = req.query;
   const { name } = req.query;
-  await generate_xml_string(ipaurl, bundleid, name);
+
   res.status(200);
 });
 
@@ -59,6 +59,13 @@ app.post('/register/app', async (req, res) => {
     name, bundleid, version,
   } = req.query;
   const { data, image, ipa } = req.body;
+  uploadipa(name, ipa);
+  uploadimage(name, image);
+  addApp(name, bundleid, version, data);
+  const s3baseurl = 'https://ipa-distribution-hanu.s3.ap-northeast-2.amazonaws.com/';
+  const ipaurl = `${s3baseurl}/${name}/${name}.ipa`;
+  const plistcontext = await generate_xml_string(ipaurl, bundleid, name);
+  await uploadplist(name, plistcontext);
   res.status(200).send(await (addApp(name, bundleid, version, data)));
 });
 
