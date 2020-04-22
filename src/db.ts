@@ -1,9 +1,7 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-
-const { Schema } = mongoose;
-
-mongoose.connect('mongodb://docker.hanukoon.com:27017/');
+const mongourl = `mongodb://${process.env.mongo_id}:${process.env.mongo_pw}@${process.env.mogno_url}/ipa-ditribution`;
+mongoose.connect(mongourl);
 
 const appSchema = new Schema({
   // rank: {type: String, required: true},
@@ -26,23 +24,29 @@ export interface IApp extends Document {
   ipafile: String;
   plistfile: String;
   imagefile: String;
-  data: String
+  data: String;
 }
 
-export async function addApp(name:IApp['name'], bundleid:IApp['bundleid'], version:IApp['version'], data:IApp['version']) {
-  const s3baseurl = 'https://ipa-distribution-hanu.s3.ap-northeast-2.amazonaws.com/';
-  app.name = name;
-  app.bundleid = bundleid;
-  app.version = version;
-  app.ipafile = `${s3baseurl}/${name}/${name}.ipa`;
-  app.plistfile = `${s3baseurl}/${name}/downloads.plist`;
-  app.imagefile = `${s3baseurl}/${name}/${name}.png`;
-  app.data = data;
-  app.save((err:any) => {
-    if (err) {
-      console.error(err);
-    }
-  });
+export async function addApp(
+  name: IApp['name'],
+  bundleid: IApp['bundleid'],
+  version: IApp['version'],
+  data: IApp['version'],
+) {
+  try {
+    const s3baseurl = 'https://ipa-distribution-hanu.s3.ap-northeast-2.amazonaws.com/';
+    app.name = name;
+    app.bundleid = bundleid;
+    app.version = version;
+    app.ipafile = `${s3baseurl}/${name}/${name}.ipa`;
+    app.plistfile = `${s3baseurl}/${name}/downloads.plist`;
+    app.imagefile = `${s3baseurl}/${name}/${name}.png`;
+    app.data = data;
+    await app.save();
+  } catch (e) {
+    console.error(e);
+  }
+  console.log('success!');
 }
 
 export async function callFromAppName(name: string) {
@@ -50,5 +54,5 @@ export async function callFromAppName(name: string) {
 }
 
 export async function appList() {
-  return ((App.find().select({ __v: 0 })));
+  return App.find().select({ __v: 0 });
 }

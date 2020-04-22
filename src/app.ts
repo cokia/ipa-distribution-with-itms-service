@@ -5,6 +5,7 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
 import {
   IApp, addApp, appList, callFromAppName,
 } from './db';
@@ -23,14 +24,14 @@ class App {
 
 const app = new App().application;
 app.use(cors());
+app.use(express.json());
+
+app.use(bodyParser());
+
 app.all('/*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'X-Requested-With');
   next();
-});
-
-app.listen(3000, () => {
-  console.info('✅ Start IPA Distribution Server ✅');
 });
 
 app.get('/', (req, res) => {
@@ -38,27 +39,40 @@ app.get('/', (req, res) => {
 });
 
 app.get('/applist', async (req, res) => {
-  res.status(200).send(await (appList()));
+  const lists = await appList();
+  res.status(200).send(lists);
 });
 
 app.get('/app/:id', async (req, res) => {
-  res.status(200).send(callFromAppName(req.query.name));
+  const callapp = await callFromAppName(req.query.name);
+  res.status(200).send(callapp);
 });
 
 app.post('/register/app', async (req, res) => {
-  const {
-    name, bundleid, version,
-  } = req.query;
-  const { data, image, ipa } = req.body;
-  uploadipa(name, ipa);
-  uploadimage(name, image);
-  const s3baseurl = 'https://ipa-distribution-hanu.s3.ap-northeast-2.amazonaws.com/';
-  const ipaurl = `${s3baseurl}/${name}/${name}.ipa`;
-  const plistcontext = await generate_xml_string(ipaurl, bundleid, name);
-  await uploadplist(name, plistcontext);
-  res.status(200).send(await (addApp(name, bundleid, version, data)));
+  try {
+    const { name, bundleid, version } = req.query;
+    const { data, image, ipa } = req.body;
+    console.log(req.body);
+    if (data) {
+      uploadipa(name, ipa);
+      uploadimage(name, image);
+      const s3baseurl = 'https://ipa-distribution-hanu.s3.ap-northeast-2.amazonaws.com/';
+      const ipaurl = `${s3baseurl}/${name}/${name}.ipa`;
+      const plistcontext = await generate_xml_string(ipaurl, bundleid, name);
+      uploadplist(name, plistcontext);
+      await addApp(name, bundleid, version, data);
+    }
+    res.status(200).send();
+  } catch (e) {
+    console.error(e);
+    res.status(500).send();
+  }
 });
 
 app.post('/update', async (req, res) => {
-  res.status(200).send(await callFromAppName(req.query.name));
+  res.status(200).send(callFromAppName(req.query.name));
+});
+
+app.listen(3000, () => {
+  console.info('✅ Start IPA Distribution Server ✅');
 });
