@@ -1,7 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import dotenv from 'dotenv';
 
 const mongourl = `mongodb://${process.env.mongo_id}:${process.env.mongo_pw}@${process.env.mogno_url}/ipa-ditribution`;
 mongoose.connect(mongourl);
+dotenv.config();
 
 const appSchema = new Schema({
   // rank: {type: String, required: true},
