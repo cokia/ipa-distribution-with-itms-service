@@ -1,9 +1,11 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import dotenv from 'dotenv';
 
-const mongourl = `mongodb://${process.env.mongo_id}:${process.env.mongo_pw}@${process.env.mogno_url}/ipa-ditribution`;
-mongoose.connect(mongourl);
 dotenv.config();
+
+// const mongourl = `mongodb://${process.env.mongo_id}:${process.env.mongo_pw}@${process.env.mogno_url}/ipa-ditribution`;
+const mongourl = 'mongodb://hanu:hjww0904@docker.hanukoon.com:27017/ipa-ditribution?authSource=admin';
+mongoose.connect(mongourl);
 
 const appSchema = new Schema({
   // rank: {type: String, required: true},
@@ -51,8 +53,8 @@ export async function addApp(
   console.log('success!');
 }
 
-export async function callFromAppName(name: string) {
-  return App.findOne({ name }).select({ __v: 0 });
+export async function callFromAppName(_id: string) {
+  return App.findOne({ _id }).select({ __v: 0 });
 }
 
 export async function appList() {

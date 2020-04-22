@@ -44,7 +44,7 @@ app.get('/applist', async (req, res) => {
 });
 
 app.get('/app/:id', async (req, res) => {
-  const callapp = await callFromAppName(req.query.name);
+  const callapp = await callFromAppName(req.params.id);
   res.status(200).send(callapp);
 });
 
@@ -67,10 +67,6 @@ app.post('/register/app', async (req, res) => {
     console.error(e);
     res.status(500).send();
   }
-});
-
-app.post('/update', async (req, res) => {
-  res.status(200).send(callFromAppName(req.query.name));
 });
 
 app.listen(3000, () => {
