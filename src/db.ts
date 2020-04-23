@@ -3,8 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// const mongourl = `mongodb://${process.env.mongo_id}:${process.env.mongo_pw}@${process.env.mogno_url}/ipa-ditribution`;
-const mongourl = 'mongodb://hanu:hjww0904@docker.hanukoon.com:27017/ipa-ditribution?authSource=admin';
+const mongourl = `mongodb://${process.env.mongo_id}:${process.env.mongo_pw}@${process.env.mogno_url}/ipa-ditribution`;
 mongoose.connect(mongourl);
 
 const appSchema = new Schema({
