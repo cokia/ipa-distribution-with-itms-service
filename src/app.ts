@@ -26,7 +26,7 @@ const app = new App().application;
 app.use(cors());
 app.use(express.json());
 
-app.use(bodyParser());
+app.use(bodyParser({ limit: '2000mb' }));
 
 app.all('/*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

@@ -15,6 +15,7 @@ const appSchema = new Schema({
   ipafile: { type: String, required: false },
   plistfile: { type: String, required: false },
   imagefile: { type: String, required: false },
+  itmsurl: { type: String, required: false },
   data: { type: String, required: false },
 });
 
@@ -28,6 +29,7 @@ export interface IApp extends Document {
   ipafile: String;
   plistfile: String;
   imagefile: String;
+  itmsurl: String;
   data: String;
 }
 
@@ -46,6 +48,7 @@ export async function addApp(
     app.plistfile = `${s3baseurl}/${name}/downloads.plist`;
     app.imagefile = `${s3baseurl}/${name}/${name}.png`;
     app.data = data;
+    app.itmsurl = `itms-services://?action=download-manifest&url=${s3baseurl}/${name}/downloads.plist`;
     await app.save();
   } catch (e) {
     console.error(e);
